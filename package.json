@@ -1,0 +1,28 @@
+{
+  "name": "space",
+  "version": "0.0.1",
+  "description": "Space manipulation in script files",
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/tomoio/space/issues"
+  },
+  "main": "./lib/space",
+  "directories": {
+    "lib": "./lib",
+    "doc": "./docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tomoio/space"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "mocha": "",
+    "chai": ""
+  },
+  "author": {
+    "name": "Tomo I/O",
+    "email": "711@tomo.io",
+    "url": "http://tomo.io/"
+  }
+}

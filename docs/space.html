@@ -1,0 +1,49 @@
+<!DOCTYPE html>  <html> <head>   <title>space.coffee</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               space.coffee             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre><span class="nv">fs = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;fs&#39;</span><span class="p">)</span>
+<span class="nv">path = </span><span class="nx">require</span><span class="p">(</span><span class="s">&#39;path&#39;</span><span class="p">)</span>
+<span class="nv">module.exports = </span><span class="k">class</span> <span class="nx">Space</span>
+  <span class="vi">@makeSpace : </span><span class="nf">(num) -&gt;</span>
+    <span class="k">if</span> <span class="nx">num</span> <span class="o">is</span> <span class="mi">0</span>
+      <span class="k">return</span> <span class="s">&#39;&#39;</span>
+    <span class="k">else</span>
+      <span class="nv">spaces = </span><span class="p">(</span><span class="s">&#39; &#39;</span> <span class="k">for</span> <span class="nx">v</span> <span class="k">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">..(</span><span class="nx">num</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)])</span>
+      <span class="k">return</span> <span class="nx">spaces</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+  <span class="vi">@modSpace : </span><span class="nf">(opts, cb) -&gt;</span>
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">opts</span><span class="p">.</span><span class="nx">file</span><span class="p">),</span> <span class="s">&#39;utf8&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span> <span class="o">=&gt;</span>
+      <span class="k">if</span> <span class="nx">err</span><span class="o">?</span>
+        <span class="nx">cb</span><span class="p">({</span><span class="nv">err : </span><span class="nx">err</span><span class="p">})</span>
+      <span class="k">else</span>
+        <span class="nv">spaces = </span><span class="p">[]</span>
+        <span class="nv">min = </span><span class="kc">false</span>
+        <span class="nv">lines = </span><span class="nx">body</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s">&#39;\n&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="nx">v</span> <span class="k">in</span> <span class="nx">lines</span>
+          <span class="nv">len = </span><span class="nx">v</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="sr">/^\s*/</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="nx">length</span>
+          <span class="k">if</span> <span class="nx">len</span> <span class="o">isnt</span> <span class="mi">0</span>
+            <span class="nx">spaces</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">len</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nx">min</span> <span class="o">is</span> <span class="kc">false</span>
+              <span class="nv">min = </span><span class="nx">len</span>
+            <span class="k">else</span>
+              <span class="nv">min = </span><span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">min</span><span class="p">,</span> <span class="nx">len</span><span class="p">)</span>
+        <span class="nv">broken = </span><span class="kc">false</span>
+        <span class="k">if</span> <span class="nx">min</span> <span class="o">isnt</span>  <span class="kc">false</span>
+          <span class="k">for</span> <span class="nx">v</span> <span class="k">in</span> <span class="nx">spaces</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">v</span> <span class="o">%</span> <span class="nx">min</span><span class="p">)</span> <span class="o">isnt</span> <span class="mi">0</span>
+              <span class="nv">broken = </span><span class="kc">true</span>
+        <span class="k">if</span> <span class="nx">min</span> <span class="o">isnt</span> <span class="kc">false</span> <span class="o">and</span> <span class="nx">broken</span> <span class="o">is</span> <span class="kc">false</span>
+          <span class="nv">newlines = </span><span class="p">[]</span>
+          <span class="k">for</span> <span class="nx">v</span> <span class="k">in</span> <span class="nx">lines</span>
+            <span class="nv">len = </span><span class="nx">v</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="sr">/^\s*/</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="nx">length</span>
+            <span class="nx">newlines</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">Space</span><span class="p">.</span><span class="nx">makeSpace</span><span class="p">((</span><span class="nx">len</span> <span class="o">/</span> <span class="nx">min</span><span class="p">)</span> <span class="o">*</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">num</span><span class="p">)</span> <span class="o">+</span> <span class="nx">v</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/^\s*/</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">))</span>
+          <span class="k">if</span> <span class="nx">opts</span><span class="p">.</span><span class="nx">save</span>
+            <span class="nx">fs</span><span class="p">.</span><span class="nx">writeFile</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">opts</span><span class="p">.</span><span class="nx">file</span><span class="p">),</span> <span class="nx">newlines</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s">&#39;\n&#39;</span><span class="p">),</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="o">=&gt;</span>
+              <span class="nx">cb</span><span class="p">({</span><span class="nv">err : </span><span class="kc">null</span><span class="p">,</span> <span class="nv">body : </span><span class="nx">newlines</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s">&#39;\n&#39;</span><span class="p">)})</span>
+            <span class="p">)</span>
+          <span class="k">else</span>
+            <span class="nx">cb</span><span class="p">({</span><span class="nv">err : </span><span class="kc">null</span><span class="p">,</span> <span class="nv">body : </span><span class="nx">newlines</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s">&#39;\n&#39;</span><span class="p">)})</span>
+        <span class="k">else</span> <span class="k">if</span> <span class="nx">broken</span>
+          <span class="nx">cb</span><span class="p">({</span><span class="nv">err : </span><span class="kc">true</span><span class="p">,</span> <span class="nv">body : </span><span class="nx">lines</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s">&#39;\n&#39;</span><span class="p">)})</span>
+        <span class="k">else</span>
+          <span class="nx">cb</span><span class="p">({</span><span class="nv">err : </span><span class="kc">null</span><span class="p">,</span> <span class="nv">body : </span><span class="nx">lines</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s">&#39;\n&#39;</span><span class="p">)})</span>
+    <span class="p">)</span>
+    
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 
